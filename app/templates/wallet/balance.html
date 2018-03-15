@@ -184,7 +184,7 @@ $(document).ready(function(){
         var tx = null;
         var balance = null;
         for(var i=0;i< data["last_txs"].length;i++){
-          if(i<4){
+          if(i<5){
             tx = data["last_txs"][i];
             if($("#GRLC_wallet").html() in Object.keys(tx["vin"])){
               balance = '<span class="text-danger">- '+ tx["vin"][$("#GRLC_wallet").html()]*0.00000001 +'</span></td>';
