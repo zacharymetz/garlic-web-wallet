@@ -147,7 +147,7 @@ $(document).ready(function(){
         }
        },
        error: function() {
-          $("#wallet_balance").html("Error Load Balance")
+          $("#wallet_balance").html("Error Loading Balance")
        }
     });
   });
@@ -173,7 +173,8 @@ $(document).ready(function(){
         if(data.is_possible == 'True'){
           $("#modal_content").html('<input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="'+data['fee']+'"  readonly><br>Total Transaction:<input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="'+data['ammount']+'"  readonly>');
         }else{
-          $("#modal_content").html("error loading fees<br>"+data['is_possible']);
+          $("#modal_content").html("THere was an error leading your fees<br>Please Try again Later");
+          $('#cofirmTransaction').hide();
         }
 
     });
