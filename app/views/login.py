@@ -96,10 +96,8 @@ def get_user():
     """
 
     if 'account' in session.keys():
-        print("there is an account")
         user = session['account']
         response = table.get_item(Key={'email':user})
-        print(response)
         if 'Item' in response.keys():
             return response['Item']
     return False
