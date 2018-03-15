@@ -1,0 +1,226 @@
+{% extends "layout.html" %}
+{% block title %} My Wallet {% endblock %}
+{% block body %}
+<style>
+.balance_wraper{
+  padding-top:2rem;
+}
+.transaction_wraper{
+  padding-top:2rem;
+}
+.wallet_cols{
+  padding-top:5vh;
+}
+.wallet_wapper{
+      min-height: 100vh;
+      background:linear-gradient(135deg,#754c68,#c6426e) 50%;
+}
+.ticker{
+  font-size:1.25rem;
+  color:#6c757d!important;
+}
+.coin_icon{
+  height:40px;
+  width:40px;
+}
+.coin_icon_wapper{
+  padding:1rem;
+}
+.wallet_button{
+  width:100%;
+}
+.balance_card{
+
+height:20rem;
+}
+.transaction_card{
+  height:20rem;
+
+}
+.balance_wapper{
+
+}
+.date{
+  font-size: 1rem;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #CFD5D4;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+
+}
+::-webkit-scrollbar:hover {
+  width:10px;
+
+}
+.cord_special{
+  padding:1px;
+}
+.wallet_button_wrapper{
+  position: absolute;
+   bottom: 0;
+   width:100%;
+   padding-bottom:1rem;
+   padding-left:1rem;
+   padding-right:1rem;
+
+}
+.additional_info{
+  padding-top:2rem;
+  padding-bottom: 2rem;
+}
+
+</style>
+<div class="wallet_wapper">
+<div class="container">
+  {% if true %}
+  <br>
+  {% if error  %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+
+  {% endif %}
+  <div class="row wallet_cols">
+    <div class="col-sm-12 col-lg-6">
+      <div class="balance_wraper">
+        <div class="card balance_card" style="">
+          <div class="card-body text-center balance_wapper">
+            <div class="coin_icon_wapper">
+              <img src="https://garlicoin.io/static/logo.040b5384.png" class="coin_icon">
+            </div>
+            <h3 class="card-title"><span id="wallet_balance">---------</span> <span class="ticker">GRLC</span></h3>
+            <h5> Current Address:</h5>
+            <p id="GRLC_wallet">{{ current_user["wallet"]["GRLC"]["0"]["address"] }}</p>
+            <div class="row wallet_button_wrapper">
+              <div class="col">
+                <form action="/wallet/send/" method="GET">
+                  <button type="submit" class="btn  btn-success wallet_button">Send Coins</button>
+                </form>
+              </div>
+              <!--<div class="col">
+                <button type="button" class="btn  btn-secondary wallet_button">Generate New Address</button>
+              </div>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-12 col-lg-6">
+      <div class="transaction_wraper">
+        <div class="card transaction_card">
+          <div class="card-body ">
+            <h4 class="text-center">Recent Transaction</h4>
+            <table class="table">
+              <tbody id="transactions">
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row wallet_button_wrapper">
+          <div class="col">
+          <!--  <button type="button" class="btn  btn-secondary wallet_button">View History</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--  <div class="additional_info">
+    <div class="card">
+
+      <div style="height:20rem;">
+
+      </div>
+    </div>
+
+
+  </div> -->
+
+
+</div>
+</div>
+<script>
+//will load te garlic ammount and the recent transactions
+$(document).ready(function(){
+
+    $.ajax( "https://garli.co.in/ext/getbalance/"+$("#GRLC_wallet").html(), {
+      success: function(data){
+
+          if(data.error != null){
+              $("#wallet_balance").html("0.00000000")
+          }else{
+          $("#wallet_balance").html(data)
+        }
+       },
+       error: function() {
+          $("#wallet_balance").html("Error Load Balance")
+       }
+    });
+    $.ajax( "https://garli.co.in/ext/getaddress/"+$("#GRLC_wallet").html(), {
+      success: function(data){
+        console.log(data);
+
+        var listString = ""; // we only need 3
+        var tx = null;
+        var balance = null;
+        for(var i=0;i< data["last_txs"].length;i++){
+          if(i<4){
+            tx = data["last_txs"][i];
+            if($("#GRLC_wallet").html() in Object.keys(tx["vin"])){
+              balance = '<span class="text-danger">- '+ tx["vin"][$("#GRLC_wallet").html()]*0.00000001 +'</span></td>';
+            }else{
+              balance = '<span class="text-success">+ '+ tx["vout"][$("#GRLC_wallet").html()]*0.00000001 +'</span></td>';
+            }
+            listString = listString + '<tr><th class="date">'+timeConverter(tx['timestamp'])+'</th><td>'+balance+'</tr>';
+          }else{
+
+          }
+        }
+        $("#transactions").html(listString);
+
+       },
+       error: function() {
+        console.log("error");
+       }
+    });
+
+
+    //jquery code goes here....
+
+});
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = a.getMonth();
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+
+</script>
+
+{% endblock %}

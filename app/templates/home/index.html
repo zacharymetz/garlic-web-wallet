@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block title %} Home {% endblock %}
+{% block body %}
+<style>
+.main_wrapper{
+background:#87CEEB;
+}
+.main{
+  text-align: center;
+  padding-top:3rem;
+  padding-bottom:3rem;
+}
+.info-container{
+  width:100%;
+
+
+  padding-top:5rem;
+  padding-bottom:5rem;
+}
+.info_image{
+  width:50%;
+  padding-bottom:1rem;
+}
+.info_text{
+  font-size: 0.75rem;
+}
+.main_about{
+  padding-top:5rem;
+  padding-bottom:5rem;
+}
+</style>
+<div class="main_wrapper">
+  <div class="container">
+    <div class="main">
+      <img src="/static/img/logo.svg" style="height:15rem;">
+      <br>
+      <br>
+      <h2 class="text-white">Welcome to Cryptocove</h2>
+
+    </div>
+  </div>
+
+
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="info-container text-center">
+        <img src="/static/img/security.svg" class="info_image">
+
+        <h4>Security</h4>
+        <p class="info_text"> Wallets are stored on secure serves with no private keys being visible to no one and only accesible by the system when it decrypts with a speial hardware key. </p>
+      </div>
+
+    </div>
+    <div class="col-md-4">
+      <div class="info-container text-center">
+        <img src="/static/img/hacker.svg" class="info_image">
+
+        <h4>Anonymity</h4>
+        <p class="info_text">We keep absolutely no personal data on any accoun holders. No ip adderss, hardware ids, even engament analytics is disabled to ensure privacy is of the utmist importance. </p>
+      </div>
+
+    </div>
+    <div class="col-md-4">
+      <div class="info-container text-center">
+        <img src="/static/img/bank.svg" class="info_image">
+
+        <h4>Hardened Infastructure</h4>
+        <p class="info_text"> Our system is hosted on the same infastrucutre as big finacial institutions and companies such as Stripe, (another one), and (another one). Giving you the peace of mind that your coins are safe and infomation is handled at the same standards. </p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+<div class="container">
+
+
+</div>
+<footer class="container">
+  <div style="border-top:1px solid #e6e6e6;padding-bottom:3rem;"></div>
+  <p class="float-right"><a href="#">Back to top</a></p>
+  <p>© 2018 Haskayne Business Technology Club · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+  <br>
+  </footer>
+
+{% endblock %}

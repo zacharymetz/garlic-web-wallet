@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block title %} Login {% endblock %}
+{% block body %}
+<style>
+  input{
+    margin-bottom:0.25rem;
+  }
+  .wallet_login{
+
+  }
+  .coin_wapper{
+    padding-top:3rem;
+    padding-bottom: 2rem;
+  }
+  .login_wapper{
+        padding-top:10vh;
+        height:calc(100vh - 56px);
+        background:linear-gradient(135deg,#754c68,#c6426e) 50%;
+  }
+  .coin_banner{
+    height:160px;
+    width:160px;
+  }
+  .info-container{
+    width:100%;
+
+
+    padding-top:5rem;
+    padding-bottom:5rem;
+  }
+  .info_image{
+    width:50%;
+    padding-bottom:1rem;
+  }
+  .info_text{
+    font-size: 0.75rem;
+  }
+</style>
+<div class="login_wapper">
+<div class="container">
+  <br>
+  {% if error != None %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endif %}
+  <div class="row ">
+    <div class="col-lg-4 col-xlg-4 col-md-3 col-sm-2 "></div>
+    <div class="col-lg-4 col-md-6 col-xl-4 col-sm-8">
+
+      <div class="text-center">
+        <div class="coin_wapper">
+          <img src="/static/img/map.svg" class="coin_banner">
+
+        </div>
+
+        <form class="wallet_login" action="/login/" method="POST">
+
+
+          <div class="form-group">
+              {{ form.email(class="form-control signup-input",placeholder="username") }}
+              {{ form.password(class="form-control signup-input",placeholder="Password") }}
+
+            <!--<input type="text" class="form-control" id="wallet_2_fac" placeholder="2 Factor Authentication">-->
+          </div>
+          <!--<div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+          </div> -->
+          {{ form.submit(class="btn btn-outline-light",style="width:100%;",placeholder="Password") }}
+
+        </form>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-3 col-xl-4"></div>
+  </div>
+</div>
+</div>
+
+
+{% endblock %}

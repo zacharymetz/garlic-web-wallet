@@ -1,0 +1,193 @@
+{% extends "layout.html" %}
+{% block title %} Send {% endblock %}
+{% block body %}
+<style>
+.send_coins_wrapper{
+  height: 100vh;
+  background:linear-gradient(135deg,#754c68,#c6426e) 50%;
+}
+.send_card_wrapper{
+  padding-top:20vh;
+}
+.send_button{
+  width:100%;
+}
+.loader {
+  width: 50%;
+  margin: 0 auto;
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #6c757d;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 0.75s linear infinite; /* Safari */
+  animation: spin 0.75s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+</style>
+<div class="send_coins_wrapper">
+  <div class="container">
+    <br>
+    {% if error != None %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      {{ error }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %}
+    <div class="send_card_wrapper">
+      <div class="row">
+        <div class=" col-md-2 col-lg-3"></div>
+        <div class="col-sm-12 col-md-8 col-lg-6">
+          <div class="card">
+            <div class="card-body ">
+              <form >
+                <div class="row send_form">
+                  <div class="col-sm-3 text-right">
+
+                      <p>Balance:</p>
+                  </div>
+                  <div class="col-sm-9">
+                        <input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="0.0"  readonly>
+                  </div>
+                </div>
+                <div class="row send_form">
+                  <div class="text-right col-sm-3">
+
+                    <p>Ammount:</p>
+                  </div>
+
+                  <div class="col-sm-9">
+                    <input type="number" class="form-control" id="transaction_ammount" aria-describedby="emailHelp" placeholder="Ammount">
+                  </div>
+                </div>
+                <div class="row send_form">
+                  <div class="text-right col-sm-3">
+
+                    <p>Address:</p>
+                  </div>
+
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="transaction_address" aria-describedby="emailHelp" placeholder="Address">
+                  </div>
+                </div>
+
+                <button type="button" id="first_send" class="btn btn-outline-secondary send_button" data-toggle="modal" data-target="#exampleModalCenter">
+                  Send
+                </button>
+
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+        <div class=" col-md-2 col-lg-3"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Confirm Transaction</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center" id="modal_content">
+        <!--The Esitmated Transaction Fee is:
+
+              <input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="0.00056"  readonly>
+              <br>
+        Total Transaction:
+            <input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="0.009"  readonly>
+
+          -->
+          <div style="text-align:center;width:100%;">
+            <br>
+            <div class="loader"></div>
+            <br>
+            <p>Esitmating transaction fee please wait...</p>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" id="cancel">Cancel</button>
+        <button type="button" class="btn btn-outline-success" id="cofirmTransaction">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+$(document).ready(function(){
+
+    $.ajax( "https://garli.co.in/ext/getbalance/"+"{{ current_user["wallet"]["GRLC"]["0"]["address"] }}", {
+      success: function(data){
+
+          if(data.error != null){
+              $("#wallet_balance").html("0.00000000")
+          }else{
+          $("#wallet_balance").val(data)
+        }
+       },
+       error: function() {
+          $("#wallet_balance").html("Error Load Balance")
+       }
+    });
+  });
+
+
+  $("#first_send").click(function(){
+    //put the loading animation in the modal
+    $("#modal_content").html('<div style="text-align:center;width:100%;"><br><div class="loader"></div><br><p>Esitmating transaction fee please wait...</p></div>');
+    $.post("/wallet/transactiondetails/",
+    {
+        ammount: $("#transaction_ammount").val(),
+        address: $("#transaction_address").val()
+
+
+    },
+    function(data, status){
+    data =  data.replaceAll("\'","\"");
+    console.log(data);
+
+      data = JSON.parse(data.toString());
+
+      console.log(typeof(data.ammount));
+        if(data.is_possible == 'True'){
+          $("#modal_content").html('<input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="'+data['fee']+'"  readonly><br>Total Transaction:<input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="'+data['ammount']+'"  readonly>');
+        }else{
+          $("#modal_content").html("error loading fees<br>"+data['is_possible']);
+        }
+
+    });
+});
+$('#cofirmTransaction').click(function(){
+  $('#modal_content').html('<p>Test Transaction Hash:</p> <p style="font-size:0.5rem;">651412e4442055b89cecda440769b395d8fe13ce8e8d64ccac077ef90d5f37e6</p>');
+  $('#cofirmTransaction').hide();
+  $('#cancel').hide();
+});
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+</script>
+
+{% endblock %}

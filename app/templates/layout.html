@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{% block title %}Cryptocove{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename = 'img/favicon.png') }}"/>
+    <link href="{{ url_for('static', filename = 'css/index.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename = 'css/lib/bootstrap.css') }}" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <style>
+    .nav_coins{
+      height:1rem;
+      margin-top:-0.25rem;
+    }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">
+    <img src="/static/img/logo.svg" style="height:30px;" class="d-inline-block align-top" alt="">
+    Cryptocove
+   </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Coins
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        <!--  <a class="dropdown-item" href="/wallet/"><img src="/static/img/coins/litecoin.svg" class="nav_coins"> LTC</a>-->
+          <a class="dropdown-item" href="/wallet/"><img src="/static/img/coins/grlc.png" class="nav_coins"> GRLC</a>
+          <a class="dropdown-item" href="/wallet/"><img src="/static/img/coins/coin.svg" class="nav_coins"> Coming Soon...</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item"  href="/addcoin/">Add Coin</a>
+        </div>
+      </li>
+
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <ul class="navbar-nav mr-auto">
+
+        {% if current_user == False %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="/login">Login</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/signup">Sign Up</a>
+        </li>
+        {% else %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ current_user['email'] }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/wallet/">My Wallet</a>
+            <a class="dropdown-item" href="/wallet/">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item"  href="/logout/">Logout</a>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+    </form>
+  </div>
+</nav>
+
+
+  {% block body %}
+
+  {% endblock %}
+
+
+
+</body>
+</html>
