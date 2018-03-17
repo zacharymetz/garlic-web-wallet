@@ -36,10 +36,13 @@
           Coins
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <!--  <a class="dropdown-item" href="/wallet/"><img src="/static/img/coins/litecoin.svg" class="nav_coins"> LTC</a>-->
+
           <a class="dropdown-item" href="/wallet/"><img src="/static/img/coins/grlc.png" class="nav_coins"> GRLC</a>
-          <a class="dropdown-item" href="/wallet/"><img src="/static/img/coins/coin.svg" class="nav_coins"> Coming Soon...</a>
-          
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item disabled" href="#"><img src="/static/img/coins/coin.svg" class="nav_coins"> Coming Soon...</a>
+           <a class="dropdown-item disabled" href="#"><img src="/static/img/coins/LCC.png" class="nav_coins"> LCC</a>
+           <a class="dropdown-item disabled" href="#"><img src="/static/img/coins/doge.svg" class="nav_coins"> DOGE</a>
+
         </div>
       </li>
 
@@ -60,7 +63,7 @@
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{ current_user['email'] }}
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="/wallet/">My Wallet</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item"  href="/logout/">Logout</a>

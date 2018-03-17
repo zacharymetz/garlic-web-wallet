@@ -1,6 +1,6 @@
 from flask import request, g, Blueprint, render_template, session, redirect, url_for,jsonify
 from app.views.login import get_user
-from app.views.forms import SendCoinsForm
+from app.views.forms import SendCoinsForm, TransactionForm
 import requests,json
 
 wallet = Blueprint('wallet', __name__)
@@ -25,9 +25,10 @@ def history():
     return redirect(url_for('login.wallet_login'))
 
 
-@wallet.route("/wallet/send/",methods=["GET","POST"])
+@wallet.route("/wallet/send/",methods=["GET"])
 def send():
     form = SendCoinsForm(request.form)
+
     current_user= get_user()
     error = None
     if current_user != False:
@@ -35,7 +36,7 @@ def send():
             error = "Your coins have been sent"
             form = SendCoinsForm()
 
-        
+
         return render_template("wallet/send.html",current_user=current_user,form=form,error=error)
 
     return redirect(url_for('login.wallet_login'))
@@ -74,3 +75,10 @@ def transaction_details():
     except:
         transaction_detail['is_possible'] = "False"
         return jsonify(str(transaction_detail))
+
+@wallet.route("/wallet/posttransaction/", methods=["POST"])
+def create_network_transaction():
+    """
+    Implimentation for the api connection to the payment server
+    """
+    return str(False)

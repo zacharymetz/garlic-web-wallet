@@ -29,3 +29,9 @@ class SendCoinsForm(FlaskForm):
     ammount = TextField('ammount')
     address = TextField('address')
     submit = SubmitField("login")
+
+class TransactionForm(FlaskForm):
+    ammount = TextField('ammount')
+    address = TextField('address')
+    fee_per_kb = HiddenField() #the fee per kb
+    password = PasswordField('password')

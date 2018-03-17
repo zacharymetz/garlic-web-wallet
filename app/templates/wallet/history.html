@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block title %} History {% endblock %}
+{% block body %}
+<style>
+.header-wrapper{
+  padding:1rem;
+}
+#transaction-history{
+  max-width: 500px;
+  margin:0 auto;
+}
+.loader {
+  width: 50%;
+  margin: 0 auto;
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #6c757d;
+  width: 60px;
+  height: 60px;
+  -webkit-animation: spin 0.75s linear infinite; /* Safari */
+  animation: spin 0.75s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+</style>
+<div class="container text-center">
+  <div class="header-wrapper">
+    <h3 class="text-muted"> Transaction History  </h3>
+    <h6>{{ current_user["wallet"]["GRLC"]["0"]["address"]}}</h6>
+
+
+  </div>
+  <div id="transaction-history">
+
+    <div class="loader" id="load"></div>
+
+    <table class="table">
+      <tbody id="transactions">
+
+      </tbody>
+    </table>
+    <form action="/wallet/">
+      <button type="submit" class="btn btn-outline-secondary"> Back To Wallet </button>
+    </form>
+  </div>
+
+</div>
+
+<script>
+$(document).ready(function(){
+  $.ajax( "https://garli.co.in/ext/getaddress/{{ current_user["wallet"]["GRLC"]["0"]["address"]}}", {
+    success: function(data){
+      console.log(data);
+
+      var listString = ""; // we only need 3
+      var tx = null;
+      var balance = null;
+      for(var i=0;i< data["last_txs"].length;i++){
+
+          tx = data["last_txs"][i];
+          if($("#GRLC_wallet").html() in Object.keys(tx["vin"])){
+            balance = '<span class="text-danger">- '+ tx["vin"]["{{ current_user["wallet"]["GRLC"]["0"]["address"]}}"]*0.00000001 +'</span></td>';
+          }else{
+            balance = '<span class="text-success">+ '+ tx["vout"]["{{ current_user["wallet"]["GRLC"]["0"]["address"]}}"]*0.00000001 +'</span></td>';
+          }
+          listString = listString + '<tr><th class="date">'+timeConverter(tx['timestamp'])+'</th><td>'+balance+'</tr>';
+
+      }
+      $('#load').hide();
+      $("#transactions").html(listString);
+
+     },
+     error: function() {
+      console.log("error");
+     }
+  });
+
+});
+function timeConverter(UNIX_timestamp){
+  var a = new Date(UNIX_timestamp * 1000);
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var year = a.getFullYear();
+  var month = a.getMonth() + 1;
+  var date = a.getDate();
+  var hour = a.getHours();
+  var min = a.getMinutes();
+  var sec = a.getSeconds();
+  var time = date + '/' + month + '/' + year + ' ' + hour + ':' + min + ':' + sec ;
+  return time;
+}
+
+</script>
+
+{% endblock %}

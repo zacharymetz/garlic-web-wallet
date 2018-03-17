@@ -139,7 +139,7 @@ height:20rem;
         </div>
         <div class="row wallet_button_wrapper">
           <div class="col">
-          <!--  <button type="button" class="btn  btn-secondary wallet_button">View History</button>-->
+           <a class="btn  btn-secondary wallet_button" href="/wallet/history/">View History</a>
           </div>
         </div>
       </div>
@@ -184,7 +184,7 @@ $(document).ready(function(){
         var tx = null;
         var balance = null;
         for(var i=0;i< data["last_txs"].length;i++){
-          if(i<5){
+          if(i<4){
             tx = data["last_txs"][i];
             if($("#GRLC_wallet").html() in Object.keys(tx["vin"])){
               balance = '<span class="text-danger">- '+ tx["vin"][$("#GRLC_wallet").html()]*0.00000001 +'</span></td>';
@@ -203,9 +203,6 @@ $(document).ready(function(){
         console.log("error");
        }
     });
-
-
-    //jquery code goes here....
 
 });
 function timeConverter(UNIX_timestamp){

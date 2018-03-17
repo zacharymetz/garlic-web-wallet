@@ -172,6 +172,7 @@ $(document).ready(function(){
       console.log(typeof(data.ammount));
         if(data.is_possible == 'True'){
           $("#modal_content").html('<input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="'+data['fee']+'"  readonly><br>Total Transaction:<input type="number" class="form-control" id="wallet_balance" aria-describedby="emailHelp" value="'+data['ammount']+'"  readonly>');
+
         }else{
           $("#modal_content").html("THere was an error leading your fees<br>Please Try again Later");
           $('#cofirmTransaction').hide();
@@ -180,9 +181,28 @@ $(document).ready(function(){
     });
 });
 $('#cofirmTransaction').click(function(){
-  $('#modal_content').html('<p>Test Transaction Hash:</p> <p style="font-size:0.5rem;">651412e4442055b89cecda440769b395d8fe13ce8e8d64ccac077ef90d5f37e6</p>');
+  $('.loader').show();
+  $.post("/wallet/posttransaction/",
+  {  },
+  function(data, status){
+
+  console.log(data);
+
+  $('.loader').hide();
+
+
+      if(data == 'False'){
+      $("#modal_content").html('<div class="alert alert-warning" role="alert">There was an error accessing the transaction service. Please Try again later.</div>');
+      }else{
+        $('#modal_content').html('<p>Test Transaction Hash:</p> <p style="font-size:0.5rem;">651412e4442055b89cecda440769b395d8fe13ce8e8d64ccac077ef90d5f37e6</p>');
+        $('#cofirmTransaction').hide();
+      }
+
+  });
+
+
   $('#cofirmTransaction').hide();
-  $('#cancel').hide();
+
 });
 
 String.prototype.replaceAll = function(search, replacement) {
