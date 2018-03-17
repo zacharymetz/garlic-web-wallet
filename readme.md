@@ -1,4 +1,4 @@
-# BT Club learning app
+# Garlic Coin Web Wallet
 
 to get working use the following commands
 
